@@ -1,0 +1,6 @@
+{
+  "loginErrors": {
+    "invalidCredentials": "Epic sadface: Username and password do not match any user in this service",
+    "wrongErrorMessage": "This is a wrong error message to test screenshot"
+  }
+}

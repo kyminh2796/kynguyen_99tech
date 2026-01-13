@@ -1,0 +1,38 @@
+{
+  "standardUser": {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "description": "Standard user with normal access"
+  },
+  "lockedOutUser": {
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "description": "User that gets locked out"
+  },
+  "problemUser": {
+    "username": "problem_user",
+    "password": "secret_sauce",
+    "description": "User with various issues"
+  },
+  "performanceGlitchUser": {
+    "username": "performance_glitch_user",
+    "password": "secret_sauce",
+    "description": "User with performance issues"
+  },
+  "errorUser": {
+    "username": "error_user",
+    "password": "secret_sauce",
+    "description": "User that encounters errors"
+  },
+  "visualUser": {
+    "username": "visual_user",
+    "password": "secret_sauce",
+    "description": "User for visual testing"
+  },
+  "invalidUser": {
+    "username": "invalid_user",
+    "password": "wrong_password",
+    "description": "Invalid credentials for negative testing"
+  }
+}
+

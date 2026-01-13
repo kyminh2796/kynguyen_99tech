@@ -1,0 +1,12 @@
+{
+  "buttons": {
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping",
+    "remove": "Remove"
+  },
+  "labels": {
+    "quantity": "QTY",
+    "description": "Description"
+  }
+}
+

@@ -1,0 +1,38 @@
+{
+  "name": "playwright-bdd-cucumber-framework",
+  "version": "1.0.0",
+  "description": "Playwright BDD testing framework with Cucumber and JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js --require-module ts-node/register --profile chromium; npm run report:html",
+    "test:demo": "cucumber-js --require-module ts-node/register --profile chromium --tags @demo; npm run report:html",
+    "test:chromium": "cucumber-js --require-module ts-node/register --profile chromium; npm run report:html",
+    "test:firefox": "cucumber-js --require-module ts-node/register --profile firefox; npm run report:html",
+    "test:webkit": "cucumber-js --require-module ts-node/register --profile webkit; npm run report:html",
+    "test:all-browsers": "cucumber-js --require-module ts-node/register --profile chromium; cucumber-js --require-module ts-node/register --profile firefox; cucumber-js --require-module ts-node/register --profile webkit; npm run report:html",
+    "report:html": "node config/report/multiple-cucumber-html-reporter.js",
+    "clean": "rimraf test-results reports screenshots videos",
+    "install:browsers": "npx playwright install"
+  },
+  "keywords": [
+    "playwright",
+    "cucumber",
+    "bdd",
+    "testing",
+    "automation",
+    "javascript"
+  ],
+  "author": "Cuong Huynh",
+  "license": "MIT",
+  "devDependencies": {
+    "@cucumber/cucumber": "^9.6.0",
+    "@playwright/test": "^1.39.0",
+    "eslint": "^8.55.0",
+    "multiple-cucumber-html-reporter": "^3.5.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^5.1.6",
+    "ts-node": "^10.9.1",
+    "@types/node": "^20.5.1"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,7 @@
+{
+  "environments": {
+    "testEnv": {
+      "baseUrl": "https://www.saucedemo.com/"
+    }
+  }
+}

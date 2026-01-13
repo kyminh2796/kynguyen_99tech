@@ -1,0 +1,71 @@
+/* Header: Show "Tags" text exactly like "Feature name" */
+table.table thead tr th i.fa-tags {
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif !important;
+    font-style: normal !important;
+    font-weight: inherit !important;
+    font-size: inherit !important;
+    color: inherit !important;
+    line-height: inherit !important;
+}
+
+table.table thead tr th i.fa-tags:before {
+    content: 'Tags' !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    font-style: normal !important;
+    font-size: inherit !important;
+}
+
+/* Table body: Hide tag icons */
+table.table tbody tr td i.fa-tag:before,
+table.table tbody tr td i.fa-tags:before {
+    content: '' !important;
+    display: none !important;
+}
+
+/* Hide the icon itself in table body only */
+table.table tbody tr td i.fa-tag,
+table.table tbody tr td i.fa-tags {
+    font-family: inherit !important;
+    font-style: normal !important;
+    font-size: 0 !important;
+}
+
+/* Show tag text as light purple badge in table body only */
+table.table tbody tr td i.fa-tag span,
+table.table tbody tr td i.fa-tags span {
+    display: inline-block !important;
+    padding: 4px 12px !important;
+    background: #b19cd9 !important;
+    background-color: #b19cd9 !important;
+    color: #ffffff !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif !important;
+    margin: 0 4px !important;
+    vertical-align: middle !important;
+    line-height: 1.4 !important;
+}
+
+/* Browser icons - ONLY target Browser column (7th column, NOT 6th!) */
+table.table tbody tr td:nth-child(7) i[class*="fa-"] {
+    font-size: 0 !important;
+}
+
+table.table tbody tr td:nth-child(7) i[class*="fa-"]:before {
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
+    font-style: normal !important;
+    font-size: 18px !important;
+    content: '❓' !important;
+}
+
+/* Browser name span - ONLY in Browser column (7th) */
+table.table tbody tr td:nth-child(7) i[class*="fa-"] span {
+    font-size: 13px !important;
+    font-weight: normal !important;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif !important;
+    margin-left: 8px !important;
+}
+
