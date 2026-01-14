@@ -1,7 +1,7 @@
 {
   "environments": {
     "testEnv": {
-      "baseUrl": "https://www.saucedemo.com/"
+      "baseUrl": "https://www.demoblaze.com/"
     }
   }
 }

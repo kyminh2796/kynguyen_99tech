@@ -22,8 +22,7 @@
     "automation",
     "javascript"
   ],
-  "author": "Cuong Huynh",
-  "license": "MIT",
+  "author": "Ky Nguyen",
   "devDependencies": {
     "@cucumber/cucumber": "^9.6.0",
     "@playwright/test": "^1.39.0",
