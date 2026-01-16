@@ -10,6 +10,7 @@
     "test:firefox": "cucumber-js --require-module ts-node/register --profile firefox; npm run report:html",
     "test:webkit": "cucumber-js --require-module ts-node/register --profile webkit; npm run report:html",
     "test:all-browsers": "cucumber-js --require-module ts-node/register --profile chromium; cucumber-js --require-module ts-node/register --profile firefox; cucumber-js --require-module ts-node/register --profile webkit; npm run report:html",
+    "test:feature": "cucumber-js --require-module ts-node/register --profile chromium",
     "report:html": "node config/report/multiple-cucumber-html-reporter.js",
     "clean": "rimraf test-results reports screenshots videos",
     "install:browsers": "npx playwright install"

@@ -1,3 +1,26 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+
+# Environment/config
+.env
+.env.*
+
+# Playwright/Cucumber artifacts
+playwright-report/
+test-results/
+traces/
+
+# Project reports
+reports/
+reports/**
+
+# VS Code
+.vscode/
 # Dependencies
 node_modules/
 

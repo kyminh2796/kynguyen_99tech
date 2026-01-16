@@ -1,18 +1,18 @@
 Feature: User Authentication
   As a user
-  I want to be able to login to the SauceDemo application
+  I want to be able to login to the Demoblaze application
   So that I can access the inventory page
 
   Background:
-    Given I am on the SauceDemo login page
-
+    Given I am on the Demoblaze login page
+  @demo
   Scenario: Login with valid credentials
     When I login as "standardUser"
     Then I should be redirected to the inventory page
 
   Scenario: Login with invalid credentials
     When I login as "invalidUser"
-    Then I should see the error message "invalidCredentials"
+    Then I should see the error message for login "invalidCredentials"
     And I should remain on the login page
 
   @demo

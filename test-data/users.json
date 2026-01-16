@@ -1,38 +1,33 @@
 {
   "standardUser": {
-    "username": "standard_user",
-    "password": "secret_sauce",
+    "username": "demoblaze_user",
+    "password": "DemoPass123",
     "description": "Standard user with normal access"
-  },
-  "lockedOutUser": {
-    "username": "locked_out_user",
-    "password": "secret_sauce",
-    "description": "User that gets locked out"
-  },
-  "problemUser": {
-    "username": "problem_user",
-    "password": "secret_sauce",
-    "description": "User with various issues"
-  },
-  "performanceGlitchUser": {
-    "username": "performance_glitch_user",
-    "password": "secret_sauce",
-    "description": "User with performance issues"
-  },
-  "errorUser": {
-    "username": "error_user",
-    "password": "secret_sauce",
-    "description": "User that encounters errors"
-  },
-  "visualUser": {
-    "username": "visual_user",
-    "password": "secret_sauce",
-    "description": "User for visual testing"
   },
   "invalidUser": {
     "username": "invalid_user",
     "password": "wrong_password",
     "description": "Invalid credentials for negative testing"
+  },
+  "newUser1": {
+    "username": "newuser_test1",
+    "password": "TestPass123!",
+    "description": "New user for sign up testing"
+  },
+  "newUser2": {
+    "username": "newuser_test2",
+    "password": "TestPass456!",
+    "description": "Another new user for sign up testing"
+  },
+  "weakPasswordUser": {
+    "username": "weakpass_user",
+    "password": "123",
+    "description": "User with weak password for validation testing"
+  },
+  "specialCharUser": {
+    "username": "user@#$%",
+    "password": "DemoPass123",
+    "description": "User with special characters in username"
   }
 }
 

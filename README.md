@@ -107,7 +107,7 @@ If everything is set up correctly, you'll see tests running and a report will be
 │
 ├── lib/                            # Utilities and helpers
 │   ├── baseLib.js                 # Base Playwright functions
-│   ├── log.js                     # Structured logging (logAction, logVerify, logInfo)
+
 │   └── utils/
 │       ├── browser-manager.js     # Browser lifecycle management
 │       └── data-helper.js         # Test data loading
@@ -169,7 +169,7 @@ npm run test:chromium
 npm run test:firefox
 ```
 
-**WebKit (Safari)**
+│   └── utils/
 ```bash
 npm run test:webkit
 ```
@@ -300,28 +300,21 @@ module.exports = defineConfig({
 
 ### How to Modify Configuration
 
-**🔧 To change browser visibility (headless mode):**
 1. Open file: `config/playwright.config.js`
-2. Go to line 18: `headless: false,`
 3. Change to: `headless: true,` (for headless mode)
 4. Save file and run tests: `npm run test:all-browsers`
 
-**📁 File location:** `config/playwright.config.js` - Line 18
 **🎯 Purpose:** Control whether browser window is visible during test execution
 
-**🔧 To change test speed (slowMo):**
 1. Open file: `config/playwright.config.js`
 2. Go to line 19: `slowMo: 800,`
 3. Change to desired value:
    - `slowMo: 0,` (fastest - no delay)
-   - `slowMo: 500,` (slow - good for watching)
    - `slowMo: 1000,` (very slow - for detailed demo)
 4. Save file and run tests: `npm run test:all-browsers`
 
 **📁 File location:** `config/playwright.config.js` - Line 19
-**🎯 Purpose:** Control speed of test execution (delay between actions)
 
-**🔧 To change parallel execution:**
 1. Open file: `config/playwright.config.js`
 2. Go to line 12: `workers: 3,`
 3. Change to desired value:
@@ -354,7 +347,6 @@ const playwrightConfig = require('./playwright.config');
 module.exports = {
   default: {
     parallel: playwrightConfig.workers,  // Auto-synced!
-    // ... other config
   }
 };
 ```
@@ -374,47 +366,33 @@ Feature: User Login
 
   @demo
   Scenario: Successful login
-    Given I am on the login page
     When I enter username "standard_user" and password "secret_sauce"
     And I click the login button
     Then I should be redirected to the inventory page
 ```
 
-### 2. Create Step Definitions
-
-`step-definitions/example.steps.js`
 ```javascript
-const { Given, When, Then } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
-const { logAction, logVerify, logInfo } = require('../lib/log');
 const LoginPage = require('../page-objects/LoginPage');
 
 let loginPage;
 
 Given('I am on the login page', async function () {
   loginPage = new LoginPage(this.page);
-  logAction('Navigate to login page');
   await loginPage.navigate('https://www.saucedemo.com/');
-  logVerify('Successfully navigated to login page');
 });
 
 When('I enter username {string} and password {string}', async function (username, password) {
-  logAction(`Enter username: ${username}`);
   await loginPage.enterUsername(username);
-  
-  logAction('Enter password: ************');
   await loginPage.enterPassword(password);
 });
 
 When('I click the login button', async function () {
-  logAction('Click login button');
   await loginPage.clickLogin();
 });
 
 Then('I should be redirected to the inventory page', async function () {
-  logVerify('Verify URL contains inventory.html');
   await expect(this.page).toHaveURL(/.*inventory.html/);
-  logInfo('✓ PASS - Redirected successfully');
 });
 ```
 
@@ -442,16 +420,10 @@ class LoginPage extends BaseLib {
   async enterPassword(password) {
     await this.fillInput(this.selectors.passwordInput, password);
   }
-
   async clickLogin() {
     await this.clickElement(this.selectors.loginButton);
   }
-}
 
-module.exports = LoginPage;
-```
-
-### 4. Add Test Data (Optional)
 
 `test-data/users.json`
 ```json
@@ -465,21 +437,13 @@ module.exports = LoginPage;
     "password": "secret_sauce"
   }
 }
-```
 
 ---
 
 ## 🔥 Advanced Features
 
-### Structured Logging
 
-```javascript
-const { logAction, logVerify, logInfo } = require('../lib/log');
 
-logAction('Click add to cart button');          // Black text
-logVerify('Verify product is in cart');         // Blue text
-logInfo('Expected: 2 items, Actual: 2 items'); // Purple text
-```
 
 ### BaseLib Utilities
 
@@ -492,7 +456,6 @@ await this.getText(selector);
 await this.isElementVisible(selector);
 await this.isElementEnabled(selector);
 await this.getElementCount(selector);
-await this.waitForElement(selector);
 ```
 
 ### Data Helper

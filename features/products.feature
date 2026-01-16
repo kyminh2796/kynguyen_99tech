@@ -4,7 +4,7 @@ Feature: Product Verification
   So that I can ensure product information is correct
 
   Background:
-    Given I am on the SauceDemo login page
+    Given I am on the Demoblaze login page
     When I login as "standardUser"
     Then I should be redirected to the inventory page
 

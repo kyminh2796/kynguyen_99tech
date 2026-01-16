@@ -1,5 +1,9 @@
 // @ts-nocheck
-const { Before, After } = require('@cucumber/cucumber');
+const { Before, After, setDefaultTimeout } = require('@cucumber/cucumber');
+const playwrightConfig = require('../config/playwright.config');
+
+// Align Cucumber step timeout with Playwright config
+setDefaultTimeout(playwrightConfig.timeout);
 
 Before(async function () {
   // Initialize world/browser before each scenario

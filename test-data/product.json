@@ -1,76 +1,76 @@
 {
   "products": [
     {
-      "name": "Sauce Labs Backpack",
-      "price": "$29.99",
-      "description": "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection."
+      "name": "Sony vaio i5",
+      "price": "$790",
+      "description": "Sony VAIO laptop with Intel i5 processor, ideal for everyday computing and light multimedia tasks."
     },
     {
-      "name": "Sauce Labs Bike Light",
-      "price": "$9.99",
-      "description": "A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included."
+      "name": "Dell i7 8GB",
+      "price": "$610",
+      "description": "Dell laptop featuring Intel Core i7 processor with 8GB RAM, perfect for professional work and development."
     },
     {
-      "name": "Sauce Labs Bolt T-Shirt",
-      "price": "$15.99",
-      "description": "Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt."
+      "name": "Samsung galaxy tab 10.1",
+      "price": "$269",
+      "description": "Samsung Galaxy Tab 10.1 inch tablet with high-resolution display and powerful performance."
     },
     {
-      "name": "Sauce Labs Fleece Jacket",
-      "price": "$49.99",
-      "description": "It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office."
+      "name": "Nokia 6.1 Plus",
+      "price": "$249",
+      "description": "Nokia 6.1 Plus smartphone with pure Android experience and reliable performance."
     },
     {
-      "name": "Sauce Labs Onesie",
-      "price": "$7.99",
-      "description": "Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel."
+      "name": "iphone 6 32gb",
+      "price": "$249",
+      "description": "Apple iPhone 6 with 32GB storage, featuring the A8 chip and beautiful Retina display."
     },
     {
-      "name": "Test.allTheThings() T-Shirt (Red)",
-      "price": "$15.99",
-      "description": "This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton."
+      "name": "MacBook Pro",
+      "price": "$1499",
+      "description": "MacBook Pro laptop with powerful processor, stunning Retina display, and exceptional build quality."
     }
   ],
   "productsByName": {
-    "Sauce Labs Backpack": {
-      "name": "Sauce Labs Backpack",
-      "price": "$29.99",
-      "description": "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection."
+    "Sony vaio i5": {
+      "name": "Sony vaio i5",
+      "price": "$790",
+      "description": "Sony VAIO laptop with Intel i5 processor, ideal for everyday computing and light multimedia tasks."
     },
-    "Sauce Labs Bike Light": {
-      "name": "Sauce Labs Bike Light",
-      "price": "$9.99",
-      "description": "A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included."
+    "Dell i7 8GB": {
+      "name": "Dell i7 8GB",
+      "price": "$610",
+      "description": "Dell laptop featuring Intel Core i7 processor with 8GB RAM, perfect for professional work and development."
     },
-    "Sauce Labs Bolt T-Shirt": {
-      "name": "Sauce Labs Bolt T-Shirt",
-      "price": "$15.99",
-      "description": "Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt."
+    "Samsung galaxy tab 10.1": {
+      "name": "Samsung galaxy tab 10.1",
+      "price": "$269",
+      "description": "Samsung Galaxy Tab 10.1 inch tablet with high-resolution display and powerful performance."
     },
-    "Sauce Labs Fleece Jacket": {
-      "name": "Sauce Labs Fleece Jacket",
-      "price": "$49.99",
-      "description": "It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office."
+    "Nokia 6.1 Plus": {
+      "name": "Nokia 6.1 Plus",
+      "price": "$249",
+      "description": "Nokia 6.1 Plus smartphone with pure Android experience and reliable performance."
     },
-    "Sauce Labs Onesie": {
-      "name": "Sauce Labs Onesie",
-      "price": "$7.99",
-      "description": "Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel."
+    "iphone 6 32gb": {
+      "name": "iphone 6 32gb",
+      "price": "$249",
+      "description": "Apple iPhone 6 with 32GB storage, featuring the A8 chip and beautiful Retina display."
     },
-    "Test.allTheThings() T-Shirt (Red)": {
-      "name": "Test.allTheThings() T-Shirt (Red)",
-      "price": "$15.99",
-      "description": "This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton."
+    "MacBook Pro": {
+      "name": "MacBook Pro",
+      "price": "$1499",
+      "description": "MacBook Pro laptop with powerful processor, stunning Retina display, and exceptional build quality."
     }
   },
   "priceRange": {
     "lowest": {
-      "name": "Sauce Labs Onesie",
-      "price": "$7.99"
+      "name": "Nokia 6.1 Plus",
+      "price": "$249"
     },
     "highest": {
-      "name": "Sauce Labs Fleece Jacket",
-      "price": "$49.99"
+      "name": "MacBook Pro",
+      "price": "$1499"
     }
   }
 }

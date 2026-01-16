@@ -1,6 +1,17 @@
 {
   "loginErrors": {
-    "invalidCredentials": "Epic sadface: Username and password do not match any user in this service",
-    "wrongErrorMessage": "This is a wrong error message to test screenshot"
+    "invalidCredentials": "User does not exist.",
+    "wrongPassword": "Wrong password."
+  },
+  "signUpErrors": {
+    "emptyUsername": "Please enter a username",
+    "emptyPassword": "Please enter a password",
+    "userExists": "This user already exists.",
+    "weakPassword": "Password is too weak",
+    "invalidCharacters": "Username contains invalid characters"
+  },
+  "successMessages": {
+    "signUpSuccess": "Sign up successful.",
+    "loginSuccess": "Login successful"
   }
 }

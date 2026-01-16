@@ -4,7 +4,7 @@ const { expect } = require('@playwright/test');
 const InventoryPage = require('../page-objects/InventoryPage.ts');
 const CartPage = require('../page-objects/CartPage.ts');
 const DataHelper = require('../lib/utils/data-helper.ts');
-const { logAction, logVerify, logInfo } = require('../lib/log.ts');
+// Removed log.ts imports
 
 let inventoryPage;
 let cartPage;
@@ -24,13 +24,13 @@ When('I add the following products to cart:', async function (dataTable) {
   // Store added products for later verification
   addedProducts = productNames;
   
-  logAction(`Adding ${productNames.length} products to cart`);
+// Removed logAction usage
   
   // Add each product to cart
   for (const productName of productNames) {
-    logAction(`Add to cart: ${productName}`);
+// Removed logAction usage
     await inventoryPage.addProductToCart(productName);
-    logInfo(`✓ Added "${productName}" to cart`);
+// Removed logInfo usage
   }
 });
 
@@ -40,17 +40,16 @@ Then('the cart badge should show {int} items', async function (expectedCount) {
     inventoryPage = new InventoryPage(this.page);
   }
   
-  logVerify(`Verify cart badge shows ${expectedCount} items`);
+// Removed logVerify usage
   
   // Cart badge is a global element, use InventoryPage method
   const actualCount = await inventoryPage.getCartItemCount();
   
-  logInfo(`Expected cart count: ${expectedCount}`);
-  logInfo(`Actual cart count: ${actualCount}`);
+// Removed logInfo usage
   
   // Verify cart count
   expect(actualCount).toBe(expectedCount);
-  logInfo(`Cart badge count: ✓ PASS`);
+// Removed logInfo usage
 });
 
 When('I open the shopping cart', async function () {
@@ -59,7 +58,7 @@ When('I open the shopping cart', async function () {
     inventoryPage = new InventoryPage(this.page);
   }
   
-  logAction('Click shopping cart icon');
+// Removed logAction usage
   await inventoryPage.clickShoppingCart();
   
   // Initialize cart page
@@ -67,7 +66,7 @@ When('I open the shopping cart', async function () {
   
   // Verify we're on cart page
   await this.page.waitForURL(/.*cart.html/);
-  logVerify('Successfully navigated to cart page');
+// Removed logVerify usage
 });
 
 Then('I should see product {string} with correct quantity and description in cart', async function (productName) {
@@ -81,7 +80,7 @@ Then('I should see product {string} with correct quantity and description in car
     productData = DataHelper.loadTestData('product.json');
   }
   
-  logVerify(`Verify product "${productName}" with quantity and description`);
+// Removed logVerify usage
   
   // Get expected product data
   const expectedProduct = productData.productsByName[productName];
@@ -89,21 +88,19 @@ Then('I should see product {string} with correct quantity and description in car
   // Verify product is in cart
   const isInCart = await cartPage.isProductInCart(productName);
   expect(isInCart).toBeTruthy();
-  logInfo(`Product "${productName}" found in cart: ✓ PASS`);
+// Removed logInfo usage
   
   // Verify quantity
   const actualQuantity = await cartPage.getProductQuantityInCart(productName);
-  logInfo(`Expected quantity: 1`);
-  logInfo(`Actual quantity: ${actualQuantity}`);
+// Removed logInfo usage
   expect(actualQuantity).toBe(1);
-  logInfo(`Quantity match: ✓ PASS`);
+// Removed logInfo usage
   
   // Verify description
   const actualDescription = await cartPage.getProductDescriptionInCart(productName);
-  logInfo(`Expected description: ${expectedProduct.description}`);
-  logInfo(`Actual description: ${actualDescription}`);
+// Removed logInfo usage
   expect(actualDescription).toBe(expectedProduct.description);
-  logInfo(`Description match: ✓ PASS`);
+// Removed logInfo usage
 });
 
 Then('the Remove button should be visible and enabled for all products in cart', async function () {
@@ -117,31 +114,30 @@ Then('the Remove button should be visible and enabled for all products in cart',
     cartPageData = DataHelper.loadTestData('cartPage.json');
   }
   
-  logVerify('Verify Remove button is visible and enabled for all products in cart');
+// Removed logVerify usage
   
   // Verify each added product has an enabled and visible Remove button
   for (const productName of addedProducts) {
-    logInfo(`Checking Remove button for: ${productName}`);
+// Removed logInfo usage
     
     // Check if remove button is visible
     const isVisible = await cartPage.isRemoveButtonVisible(productName);
     expect(isVisible).toBeTruthy();
-    logInfo(`Remove button visible: ✓ PASS`);
+// Removed logInfo usage
     
     // Check if remove button is enabled
     const isEnabled = await cartPage.isRemoveButtonEnabled(productName);
     expect(isEnabled).toBeTruthy();
-    logInfo(`Remove button enabled: ✓ PASS`);
+// Removed logInfo usage
     
     // Verify button text
     const buttonText = await cartPage.getRemoveButtonText(productName);
-    logInfo(`Expected button text: ${cartPageData.buttons.remove}`);
-    logInfo(`Actual button text: ${buttonText}`);
+// Removed logInfo usage
     expect(buttonText).toBe(cartPageData.buttons.remove);
-    logInfo(`Button text match: ✓ PASS`);
+// Removed logInfo usage
   }
   
-  logVerify('All Remove buttons verified successfully ✓');
+// Removed logVerify usage
 });
 
 Then('the Checkout button should be visible and enabled with correct text', async function () {
@@ -155,24 +151,23 @@ Then('the Checkout button should be visible and enabled with correct text', asyn
     cartPageData = DataHelper.loadTestData('cartPage.json');
   }
   
-  logVerify('Verify Checkout button is visible, enabled with correct text');
+// Removed logVerify usage
   
   // Check if checkout button is visible
   const isVisible = await cartPage.isCheckoutButtonVisible();
   expect(isVisible).toBeTruthy();
-  logInfo(`Checkout button visible: ✓ PASS`);
+// Removed logInfo usage
   
   // Check if checkout button is enabled
   const isEnabled = await cartPage.isCheckoutButtonEnabled();
   expect(isEnabled).toBeTruthy();
-  logInfo(`Checkout button enabled: ✓ PASS`);
+// Removed logInfo usage
   
   // Verify button text
   const buttonText = await cartPage.getCheckoutButtonText();
-  logInfo(`Expected button text: ${cartPageData.buttons.checkout}`);
-  logInfo(`Actual button text: ${buttonText}`);
+// Removed logInfo usage
   expect(buttonText).toBe(cartPageData.buttons.checkout);
-  logInfo(`Button text match: ✓ PASS`);
+// Removed logInfo usage
 });
 
 Then('the Continue Shopping button should be visible and enabled with correct text', async function () {
@@ -186,24 +181,23 @@ Then('the Continue Shopping button should be visible and enabled with correct te
     cartPageData = DataHelper.loadTestData('cartPage.json');
   }
   
-  logVerify('Verify Continue Shopping button is visible, enabled with correct text');
+// Removed logVerify usage
   
   // Check if continue shopping button is visible
   const isVisible = await cartPage.isContinueShoppingButtonVisible();
   expect(isVisible).toBeTruthy();
-  logInfo(`Continue Shopping button visible: ✓ PASS`);
+// Removed logInfo usage
   
   // Check if continue shopping button is enabled
   const isEnabled = await cartPage.isContinueShoppingButtonEnabled();
   expect(isEnabled).toBeTruthy();
-  logInfo(`Continue Shopping button enabled: ✓ PASS`);
+// Removed logInfo usage
   
   // Verify button text
   const buttonText = await cartPage.getContinueShoppingButtonText();
-  logInfo(`Expected button text: ${cartPageData.buttons.continueShopping}`);
-  logInfo(`Actual button text: ${buttonText}`);
+// Removed logInfo usage
   expect(buttonText).toBe(cartPageData.buttons.continueShopping);
-  logInfo(`Button text match: ✓ PASS`);
+// Removed logInfo usage
 });
 
 Then('the cart badge should match the number of products added before removing', async function () {
@@ -215,18 +209,16 @@ Then('the cart badge should match the number of products added before removing',
   // Calculate expected count from added products
   const expectedCount = addedProducts.length;
   
-  logVerify(`Verify cart badge shows ${expectedCount} items BEFORE removing product`);
+// Removed logVerify usage
   
   // Cart badge is a global element, use InventoryPage method
   const actualCount = await inventoryPage.getCartItemCount();
   
-  logInfo(`Number of products added: ${expectedCount}`);
-  logInfo(`Expected cart count (before remove): ${expectedCount}`);
-  logInfo(`Actual cart count (before remove): ${actualCount}`);
+// Removed logInfo usage
   
   // Verify cart count
   expect(actualCount).toBe(expectedCount);
-  logInfo(`Cart badge count before remove: ✓ PASS`);
+// Removed logInfo usage
 });
 
 When('I remove product {string} from cart', async function (productName) {
@@ -235,12 +227,12 @@ When('I remove product {string} from cart', async function (productName) {
     cartPage = new CartPage(this.page);
   }
   
-  logAction(`Remove product "${productName}" from cart`);
+// Removed logAction usage
   
   // Remove the product
   await cartPage.removeProductFromCart(productName);
   
-  logInfo(`✓ Product "${productName}" removed from cart`);
+// Removed logInfo usage
 });
 
 Then('the cart badge should decrease by {int} after removing product', async function (decreaseBy) {
@@ -252,17 +244,14 @@ Then('the cart badge should decrease by {int} after removing product', async fun
   // Calculate expected count: original count - removed count
   const expectedCount = addedProducts.length - decreaseBy;
   
-  logVerify(`Verify cart badge decreased by ${decreaseBy} after removing product`);
+// Removed logVerify usage
   
   // Cart badge is a global element, use InventoryPage method
   const actualCount = await inventoryPage.getCartItemCount();
   
-  logInfo(`Original product count: ${addedProducts.length}`);
-  logInfo(`Products removed: ${decreaseBy}`);
-  logInfo(`Expected cart count (after remove): ${expectedCount}`);
-  logInfo(`Actual cart count (after remove): ${actualCount}`);
+// Removed logInfo usage
   
   // Verify cart count
   expect(actualCount).toBe(expectedCount);
-  logInfo(`Cart badge count after remove: ✓ PASS`);
+// Removed logInfo usage
 });
