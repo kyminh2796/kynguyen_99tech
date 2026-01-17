@@ -15,7 +15,7 @@ module.exports = defineConfig({
     baseURL: process.env.BASE_URL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    headless: false, // Show browser window when running tests
+    headless: true, // Run in headless mode (no browser window)
     slowMo: 800, // Slow down actions by milliseconds (0 = no delay, 500 = slow, 1000 = very slow)
     viewport: { width: 1280, height: 720 },
     ignoreHTTPSErrors: true,

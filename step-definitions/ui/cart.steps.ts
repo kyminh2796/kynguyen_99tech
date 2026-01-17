@@ -1,10 +1,10 @@
 // @ts-nocheck
 const { When, Then, Given } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
-const InventoryPage = require('../page-objects/InventoryPage.ts');
-const CartPage = require('../page-objects/CartPage.ts');
-const DataHelper = require('../lib/utils/data-helper.ts');
-const LoginPage = require('../page-objects/LoginPage.ts');
+const InventoryPage = require('../../page-objects/ui/InventoryPage.ts');
+const CartPage = require('../../page-objects/ui/CartPage.ts');
+const DataHelper = require('../../lib/utils/data-helper.ts');
+const LoginPage = require('../../page-objects/ui/LoginPage.ts');
 
 let inventoryPage;
 let cartPage;

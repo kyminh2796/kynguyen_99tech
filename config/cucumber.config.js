@@ -7,6 +7,7 @@ const commonConfig = {
   ],
   require: [
     'step-definitions/**/*.ts',
+    'step-definitions/**/**/*.ts',
     'support/**/*.ts',
     'hooks/**/*.ts'
   ],

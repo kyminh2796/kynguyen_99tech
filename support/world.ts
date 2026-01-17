@@ -1,6 +1,7 @@
 // @ts-nocheck
 const { setWorldConstructor, World } = require('@cucumber/cucumber');
 const BrowserManager = require('../lib/utils/browser-manager.ts');
+const { chromium } = require('@playwright/test');
 
 class CustomWorld extends World {
   constructor(options) {
@@ -10,6 +11,7 @@ class CustomWorld extends World {
     this.browser = null;
     this.context = null;
     this.page = null;
+    this.apiRequest = null;
     
     // Configuration from world parameters (passed from cucumber.config.js → playwright.config.js)
     this.config = {
@@ -25,6 +27,15 @@ class CustomWorld extends World {
     
     this.context = await this.browserManager.createContext();
     this.page = await this.browserManager.createPage();
+    
+    // Initialize API request context for API testing
+    try {
+      this.apiRequest = await this.context.newAPIRequestContext({
+        baseURL: this.config.baseUrl,
+      });
+    } catch (error) {
+      console.warn("Could not create API request context:", error);
+    }
     
     // Set default timeout
     this.page.setDefaultTimeout(this.config.timeout);

@@ -59,4 +59,5 @@ jobs:
       
       - name: Failure notification
         if: failure()
-        run: echo "❌ Scheduled tests failed. Check run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: |
+          echo "❌ Scheduled tests failed. Check run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

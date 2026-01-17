@@ -1,0 +1,86 @@
+{
+  "testUsers": [
+    {
+      "username": "apiTestUser1",
+      "password": "TestPass123!",
+      "expectedId": null
+    },
+    {
+      "username": "apiTestUser2",
+      "password": "SecurePass456!",
+      "expectedId": null
+    }
+  ],
+  "testProducts": [
+    {
+      "id": 1,
+      "title": "Samsung Galaxy S6",
+      "price": 360,
+      "category": "phone"
+    },
+    {
+      "id": 2,
+      "title": "Nokia Lumia 1520",
+      "price": 820,
+      "category": "phone"
+    },
+    {
+      "id": 3,
+      "title": "MacBook Air",
+      "price": 900,
+      "category": "laptop"
+    },
+    {
+      "id": 4,
+      "title": "Sony vaio i5",
+      "price": 790,
+      "category": "laptop"
+    }
+  ],
+  "cartOperations": [
+    {
+      "operation": "addSingleProduct",
+      "productId": 1,
+      "quantity": 1,
+      "expectedItemCount": 1
+    },
+    {
+      "operation": "addMultipleProducts",
+      "productIds": [1, 3, 4],
+      "quantity": 1,
+      "expectedItemCount": 3
+    },
+    {
+      "operation": "removeProduct",
+      "productId": 1,
+      "expectedItemCount": 2
+    }
+  ],
+  "endpoints": {
+    "products": "/products",
+    "users": "/users",
+    "login": "/login",
+    "carts": "/carts",
+    "orders": "/orders",
+    "health": "/health",
+    "status": "/status"
+  },
+  "errorCases": [
+    {
+      "name": "InvalidProductId",
+      "productId": 99999,
+      "expectedStatus": 404
+    },
+    {
+      "name": "InvalidUserId",
+      "userId": 99999,
+      "expectedStatus": 404
+    },
+    {
+      "name": "DuplicateUsername",
+      "username": "standardUser",
+      "password": "TestPass123!",
+      "expectedStatus": 400
+    }
+  ]
+}

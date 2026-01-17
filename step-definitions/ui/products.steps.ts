@@ -1,8 +1,8 @@
 // @ts-nocheck
 const { Then } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
-const InventoryPage = require('../page-objects/InventoryPage.ts');
-const DataHelper = require('../lib/utils/data-helper.ts');
+const InventoryPage = require('../../page-objects/ui/InventoryPage.ts');
+const DataHelper = require('../../lib/utils/data-helper.ts');
 
 let inventoryPage;
 let productData;

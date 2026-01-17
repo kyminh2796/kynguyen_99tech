@@ -6,6 +6,7 @@ Feature: User Sign Up
   Background:
     Given I am on the Demoblaze sign up page
 
+  @regression
   Scenario: Sign up with random valid credentials
     When I generate a random username
     And I enter the username in the sign up form
@@ -14,6 +15,7 @@ Feature: User Sign Up
     Then I should see the success message "Sign up successful"
     And the new account should be created and ready to use
 
+  @regression
   Scenario: Sign up with empty username
     When I leave the username field empty
     And I enter a valid password "DemoPass123!"
@@ -21,6 +23,7 @@ Feature: User Sign Up
     Then I should see the error message "Please enter a username"
     And I should remain on the sign up page
 
+  @regression
   Scenario: Sign up with empty password
     When I enter a username "newUser"
     And I leave the password field empty
@@ -28,6 +31,7 @@ Feature: User Sign Up
     Then I should see the error message "Please enter a password"
     And I should remain on the sign up page
 
+  @regression
   Scenario: Sign up with both username and password empty
     When I leave the username field empty
     And I leave the password field empty
@@ -35,7 +39,7 @@ Feature: User Sign Up
     Then I should see the error message "Please enter a username"
     And I should remain on the sign up page
 
-  @demo
+  @regression @demo
   Scenario: Sign up with existing username
     When I enter an existing username "standardUser"
     And I enter a valid password "DemoPass123!"
@@ -43,7 +47,7 @@ Feature: User Sign Up
     Then I should see the error message "This user already exists"
     And I should remain on the sign up page
 
-  @demo
+  @regression @demo
   Scenario: Successful sign up and immediate login with new account
     When I generate a random username
     And I enter the username in the sign up form
