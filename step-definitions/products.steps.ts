@@ -3,7 +3,6 @@ const { Then } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
 const InventoryPage = require('../page-objects/InventoryPage.ts');
 const DataHelper = require('../lib/utils/data-helper.ts');
-// Removed log.ts imports
 
 let inventoryPage;
 let productData;
@@ -17,7 +16,7 @@ Then('I get all products with their name and price', async function () {
   // Load product data
   productData = DataHelper.loadTestData('product.json');
   
-// Removed logVerify usage
+  // Get all products from the page
   
   // Loop through expected products and verify each one
   for (let i = 0; i < productData.products.length; i++) {

@@ -5,7 +5,6 @@ const LoginPage = require('../page-objects/LoginPage.ts');
 const InventoryPage = require('../page-objects/InventoryPage.ts');
 const DataHelper = require('../lib/utils/data-helper.ts');
 
-
 let loginPage;
 let inventoryPage;
 let testSiteData;
@@ -109,6 +108,8 @@ When('I click the sign up button', async function () {
   await loginPage.clickSignUpButton();
   // Wait a moment to ensure the alert is handled
   await this.page.waitForTimeout(1500);
+  const successMsg = await loginPage.getSignUpSuccessMessage();
+  this.lastDialogMessage = successMsg || this.lastDialogMessage;
 });
 
 Then('I should see the success message {string}', async function (messageType) {
@@ -166,11 +167,8 @@ Given('I am on the Demoblaze login page', async function () {
   testSiteData = DataHelper.loadTestData('testSite.json');
   errorMessages = DataHelper.loadTestData('errorMessages.json');
   const baseUrl = testSiteData.environments.testEnv.baseUrl;
-  
-  logAction(`Navigate to login page: ${baseUrl}`);
   loginPage = new LoginPage(this.page);
   await loginPage.navigateTo(baseUrl);
-  await loginPage.clickLoginLink();
   await expect(this.page).toHaveURL(baseUrl);
 
 });
@@ -181,23 +179,35 @@ When('I login as {string}', async function (userType) {
   if (!usersData) {
     usersData = DataHelper.loadTestData('users.json');
   }
-  
   const user = usersData[userType];
-  
   if (!user) {
     throw new Error(`User type "${userType}" not found in users.json`);
   }
   if (!loginPage) {
     loginPage = new LoginPage(this.page);
   }
+  await loginPage.clickLoginLink();
   await loginPage.enterUsername(user.username);
-  logAction(`Entered username: ${user.username}`);
-  
   await loginPage.enterPassword(user.password);
-  logAction('Entered password: ************');
+  
+  // Capture potential browser alert (e.g., wrong password / invalid user)
+  this.lastDialogMessage = '';
+  const dialogHandler = (dialog) => {
+    this.lastDialogMessage = dialog.message();
+    return dialog.accept();
+  };
+  this.page.once('dialog', dialogHandler);
   
   await loginPage.clickLoginButton();
-  logAction('Clicked login button');
+  
+  // Brief wait for dialog if it appears
+  await this.page.waitForTimeout(1500).catch(() => {});
+  // Verify we got the login response
+  try {
+    await loginPage.waitForInventoryPage(5000);
+  } catch (e) {
+    // Dialog may have appeared instead
+  }
 });
 
 Then('I should be redirected to the inventory page', async function () {
@@ -207,25 +217,73 @@ Then('I should be redirected to the inventory page', async function () {
   expect(greetingVisible).toBeTruthy();
 });
 
+When('I click the logout button', async function () {
+  if (!loginPage) {
+    loginPage = new LoginPage(this.page);
+  }
+  await loginPage.clickLogout();
+});
+
+Then('I should see the login button visible', async function () {
+  const visible = await loginPage.isLoginLinkVisible();
+  expect(visible).toBeTruthy();
+});
+
+When('I refresh the page', async function () {
+  await this.page.reload({ waitUntil: 'domcontentloaded' });
+});
+
+Then('I should remain logged in', async function () {
+  const greetingVisible = await loginPage.isUserGreetingVisible();
+  expect(greetingVisible).toBeTruthy();
+});
+
+When('I click the login link repeatedly', async function () {
+  if (!loginPage) {
+    loginPage = new LoginPage(this.page);
+  }
+  for (let i = 0; i < 3; i++) {
+    await loginPage.clickLoginLink();
+    await this.page.waitForTimeout(200);
+  }
+});
+
+Then('I should see a single login modal open', async function () {
+  const count = await loginPage.getLoginModalCount();
+  expect(count).toBe(1);
+});
+
 Then('I should see the error message {string}', async function (errorType) {
-  // If we captured an alert (signup flow), use that message
+  // If we captured an alert (login/signup flow), use that message
   if (this.lastDialogMessage && this.lastDialogMessage.trim()) {
     const actual = this.lastDialogMessage.trim().toLowerCase();
-    let expected = (errorType || '').trim().toLowerCase();
-    // Normalize common Demoblaze messages
-    if (expected.includes('username') || expected.includes('password')) {
+    // Map token to configured message first, then normalize
+    let expected =
+      (errorMessages.loginErrors && errorMessages.loginErrors[errorType]) ||
+      (errorMessages.signUpErrors && errorMessages.signUpErrors[errorType]) ||
+      errorType;
+    expected = (expected || '').trim().toLowerCase();
+    // Demoblaze normalizes empty-field alerts to a single message
+    if (
+      errorType.toLowerCase() === 'emptyusername' ||
+      errorType.toLowerCase() === 'emptypassword' ||
+      expected.includes('please enter a username') ||
+      expected.includes('please enter a password') ||
+      errorType.toLowerCase().includes('empty')
+    ) {
       expected = 'please fill out username and password.';
     }
     if (expected.includes('already exists')) {
-      expected = 'this user already exist.'; // Demoblaze uses singular "exist"
+      expected = 'this user already exist.';
     }
     expect(actual).toContain(expected);
     return;
   }
 
-  // Fallback to inline error (login flow)
   const actualErrorMessage = await loginPage.getErrorMessage();
-  const expectedErrorMessage = errorMessages.loginErrors[errorType] || errorMessages.signUpErrors[errorType] || errorType;
+  const expectedErrorMessage = (errorMessages.loginErrors && errorMessages.loginErrors[errorType]) ||
+    (errorMessages.signUpErrors && errorMessages.signUpErrors[errorType]) ||
+    errorType;
   expect((actualErrorMessage || '').toLowerCase()).toContain((expectedErrorMessage || '').toLowerCase());
 });
 

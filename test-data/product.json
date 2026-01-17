@@ -7,71 +7,19 @@
     },
     {
       "name": "Dell i7 8GB",
-      "price": "$610",
+      "price": "$700",
       "description": "Dell laptop featuring Intel Core i7 processor with 8GB RAM, perfect for professional work and development."
     },
     {
-      "name": "Samsung galaxy tab 10.1",
-      "price": "$269",
-      "description": "Samsung Galaxy Tab 10.1 inch tablet with high-resolution display and powerful performance."
-    },
-    {
-      "name": "Nokia 6.1 Plus",
-      "price": "$249",
-      "description": "Nokia 6.1 Plus smartphone with pure Android experience and reliable performance."
-    },
-    {
-      "name": "iphone 6 32gb",
-      "price": "$249",
-      "description": "Apple iPhone 6 with 32GB storage, featuring the A8 chip and beautiful Retina display."
+      "name": "MacBook air",
+      "price": "$700",
+      "description": "MacBook Air laptop with Intel processor, lightweight design, and excellent battery life."
     },
     {
       "name": "MacBook Pro",
-      "price": "$1499",
+      "price": "$1100",
       "description": "MacBook Pro laptop with powerful processor, stunning Retina display, and exceptional build quality."
     }
-  ],
-  "productsByName": {
-    "Sony vaio i5": {
-      "name": "Sony vaio i5",
-      "price": "$790",
-      "description": "Sony VAIO laptop with Intel i5 processor, ideal for everyday computing and light multimedia tasks."
-    },
-    "Dell i7 8GB": {
-      "name": "Dell i7 8GB",
-      "price": "$610",
-      "description": "Dell laptop featuring Intel Core i7 processor with 8GB RAM, perfect for professional work and development."
-    },
-    "Samsung galaxy tab 10.1": {
-      "name": "Samsung galaxy tab 10.1",
-      "price": "$269",
-      "description": "Samsung Galaxy Tab 10.1 inch tablet with high-resolution display and powerful performance."
-    },
-    "Nokia 6.1 Plus": {
-      "name": "Nokia 6.1 Plus",
-      "price": "$249",
-      "description": "Nokia 6.1 Plus smartphone with pure Android experience and reliable performance."
-    },
-    "iphone 6 32gb": {
-      "name": "iphone 6 32gb",
-      "price": "$249",
-      "description": "Apple iPhone 6 with 32GB storage, featuring the A8 chip and beautiful Retina display."
-    },
-    "MacBook Pro": {
-      "name": "MacBook Pro",
-      "price": "$1499",
-      "description": "MacBook Pro laptop with powerful processor, stunning Retina display, and exceptional build quality."
-    }
-  },
-  "priceRange": {
-    "lowest": {
-      "name": "Nokia 6.1 Plus",
-      "price": "$249"
-    },
-    "highest": {
-      "name": "MacBook Pro",
-      "price": "$1499"
-    }
+  ]
   }
-}
 

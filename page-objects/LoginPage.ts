@@ -1,5 +1,3 @@
-import { log } from "console";
-
 // @ts-nocheck
 const BaseLib = require('../lib/baseLib.ts');
 
@@ -10,10 +8,12 @@ class LoginPage extends BaseLib {
     // Selectors for Demoblaze (CSS selectors only - faster and more reliable)
     this.selectors = {
       loginLink: '#login2',
+      logoutLink: '#logout2',
       signUpLink: '#signin2',
       usernameInput: '#loginusername',
       passwordInput: '#loginpassword',
       loginButton: '//*[@id="logInModal"]/div/div/div[3]/button[2]',
+      loginModal: '#logInModal',
       signUpUsername: '#sign-username',
       signUpPassword: '#sign-password',
       signUpButton: '//*[@id="signInModal"]/div/div/div[3]/button[2]',
@@ -32,6 +32,11 @@ class LoginPage extends BaseLib {
   async clickLoginLink() {
     await this.page.waitForSelector(this.selectors.loginLink, { state: 'visible' });
     await this.page.click(this.selectors.loginLink, { force: true });
+  }
+
+  async clickLogout() {
+    await this.page.waitForSelector(this.selectors.logoutLink, { state: 'visible' });
+    await this.page.click(this.selectors.logoutLink, { force: true });
   }
 
   async clickSignUpLink() {
@@ -62,14 +67,10 @@ class LoginPage extends BaseLib {
 
   async clickLoginButton() {
     // Wait for login button to be visible and enabled
-    await this.page.waitForSelector(this.selectors.loginButton, { state: 'visible', timeout: 7000 });
     const button = this.page.locator(this.selectors.loginButton);
-    await button.waitFor({ state: 'visible', timeout: 7000 });
-    // Optionally highlight for debug
-    if (this.highlightElement) {
-      await this.highlightElement(this.selectors.loginButton);
-    }
-    // Ensure button is enabled
+    await button.waitFor({ state: 'visible', timeout: 5000 });
+    
+    // Ensure button is enabled before clicking
     if (await button.isEnabled()) {
       await button.click({ force: true });
     } else {
@@ -82,14 +83,7 @@ class LoginPage extends BaseLib {
     await this.page.click(this.selectors.signUpButton);
   }
 
-  async getErrorMessage() {
-    try {
-      const errorText = await this.page.textContent(this.selectors.errorMessage);
-      return errorText ? errorText.trim() : '';
-    } catch (e) {
-      return '';
-    }
-  }
+
   async closeSignUpModal() {
     const modal = this.page.locator('#signInModal');
     if (await modal.isVisible()) {
@@ -113,6 +107,14 @@ class LoginPage extends BaseLib {
     return await this.page.isVisible(this.selectors.welcomeUser);
   }
 
+  async isLoginLinkVisible() {
+    return await this.page.isVisible(this.selectors.loginLink);
+  }
+
+  async getLoginModalCount() {
+    return await this.getElementCount(this.selectors.loginModal);
+  }
+
   async clearSignUpUsername() {
     await this.page.fill(this.selectors.signUpUsername, '');
   }
@@ -121,33 +123,24 @@ class LoginPage extends BaseLib {
     await this.page.fill(this.selectors.signUpPassword, '');
   }
 
-  async loginWithRetry(username, password, attempts = 3, greetingTimeout = 8000) {
-    let loginAlert = '';
-    for (let attempt = 1; attempt <= attempts; attempt++) {
-      await this.enterUsername(username);
-      await this.enterPassword(password);
+  async waitForLoginForm(timeout = 5000) {
+    await this.page.waitForSelector(this.selectors.loginLink, { timeout });
+  }
 
-      const dialogPromise = new Promise(resolve => {
-        this.page.once('dialog', async (dialog) => {
-          loginAlert = dialog.message();
-          await dialog.accept();
-          resolve('dialog');
-        });
-      });
-      const greetingPromise = this.waitForUserGreeting(greetingTimeout).then(() => 'greeting');
+  async clickLoginLinkIfVisible() {
+    await this.page.click(this.selectors.loginLink).catch(() => {});
+  }
 
-      await this.clickLoginButton();
-      const outcome = await Promise.race([dialogPromise, greetingPromise]);
-      const success = outcome === 'greeting' || await this.isUserGreetingVisible();
-      if (success) {
-        return { success: true };
-      }
-      if (attempt < attempts) {
-        await this.page.waitForTimeout(1500);
-        await this.clickLoginLink();
-      }
-    }
-    return { success: false, alert: loginAlert };
+  async waitForInventoryPage(timeout = 5000) {
+    await this.page.waitForSelector('#tbodyid', { timeout });
+  }
+
+  async getSignUpSuccessMessage() {
+    const alert = await this.page.evaluate(() => {
+      const el = document.querySelector('.alert');
+      return el ? el.textContent : '';
+    }).catch(() => '');
+    return alert;
   }
 }
 
