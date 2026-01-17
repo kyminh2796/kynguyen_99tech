@@ -50,10 +50,10 @@ jobs:
       
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npm run install:browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
       
       - name: Run functional UI tests on ${{ matrix.browser }}
-        run: npx cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "(@functional and @ui)"
+        run: npx cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@ui"
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
           CI: true
