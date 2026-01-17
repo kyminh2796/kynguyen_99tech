@@ -6,7 +6,7 @@ Feature: User Authentication
   Background:
     Given I am on the Demoblaze login page
 
-  @regression @functional @P0 @demo
+  @regression @functional @P0
   Scenario: L-01 Login with valid username and password
     When I login as "standardUser"
     Then I should be redirected to the inventory page

@@ -1,0 +1,519 @@
+name: Test Suites by Category
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Test suite to run'
+        required: true
+        type: choice
+        options:
+          - all
+          - functional
+          - regression
+          - api
+          - performance
+
+# Prevent concurrent runs on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: Functional UI Tests
+  functional-tests:
+    name: Functional UI Tests - ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: |
+      github.event_name != 'workflow_dispatch' || 
+      github.event.inputs.suite == 'all' || 
+      github.event.inputs.suite == 'functional'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package.json').devDependencies['@playwright/test']")" >> $GITHUB_OUTPUT
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npm run install:browsers
+      
+      - name: Run functional UI tests
+        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@functional and @ui"
+        env:
+          BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
+          CI: true
+        continue-on-error: false
+      
+      - name: Generate HTML report
+        if: always()
+        run: npm run report:html
+        continue-on-error: true
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: functional-results-${{ matrix.browser }}
+          path: |
+            reports/
+            test-results/
+          retention-days: 30
+          compression-level: 6
+      
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: functional-screenshots-${{ matrix.browser }}
+          path: reports/${{ matrix.browser }}/screenshots/
+          retention-days: 7
+          compression-level: 6
+
+  # Job 2: Regression Tests
+  regression-tests:
+    name: Regression Tests - ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: |
+      github.event_name != 'workflow_dispatch' || 
+      github.event.inputs.suite == 'all' || 
+      github.event.inputs.suite == 'regression'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package.json').devDependencies['@playwright/test']")" >> $GITHUB_OUTPUT
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npm run install:browsers
+      
+      - name: Run regression tests
+        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@regression"
+        env:
+          BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
+          CI: true
+        continue-on-error: false
+      
+      - name: Generate HTML report
+        if: always()
+        run: npm run report:html
+        continue-on-error: true
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-results-${{ matrix.browser }}
+          path: |
+            reports/
+            test-results/
+          retention-days: 30
+          compression-level: 6
+      
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-screenshots-${{ matrix.browser }}
+          path: reports/${{ matrix.browser }}/screenshots/
+          retention-days: 7
+          compression-level: 6
+
+  # Job 3: API Tests
+  api-tests:
+    name: API Tests - ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: |
+      github.event_name != 'workflow_dispatch' || 
+      github.event.inputs.suite == 'all' || 
+      github.event.inputs.suite == 'api'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium] # API tests typically only need one browser
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package.json').devDependencies['@playwright/test']")" >> $GITHUB_OUTPUT
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npm run install:browsers
+      
+      - name: Run API tests
+        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@api"
+        env:
+          BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
+          CI: true
+        continue-on-error: false
+      
+      - name: Generate HTML report
+        if: always()
+        run: npm run report:html
+        continue-on-error: true
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-results-${{ matrix.browser }}
+          path: |
+            reports/
+            test-results/
+          retention-days: 30
+          compression-level: 6
+
+  # Job 4: Performance Tests
+  performance-tests:
+    name: Performance Tests - ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    if: |
+      github.event_name != 'workflow_dispatch' || 
+      github.event.inputs.suite == 'all' || 
+      github.event.inputs.suite == 'performance'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium] # Performance tests typically only need one browser
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package.json').devDependencies['@playwright/test']")" >> $GITHUB_OUTPUT
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npm run install:browsers
+      
+      - name: Run performance tests
+        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@performance"
+        env:
+          BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
+          CI: true
+        continue-on-error: false
+      
+      - name: Generate HTML report
+        if: always()
+        run: npm run report:html
+        continue-on-error: true
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results-${{ matrix.browser }}
+          path: |
+            reports/
+            test-results/
+          retention-days: 30
+          compression-level: 6
+
+  # Consolidated Report
+  report:
+    name: Generate Consolidated Report
+    runs-on: ubuntu-latest
+    needs: [functional-tests, regression-tests, api-tests, performance-tests]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Organize reports
+        run: |
+          mkdir -p reports
+          
+          # Organize functional test reports
+          for browser in chromium firefox webkit; do
+            if [ -d "artifacts/functional-results-$browser/reports/$browser" ]; then
+              mkdir -p "reports/functional/$browser"
+              cp -r "artifacts/functional-results-$browser/reports/$browser"/* "reports/functional/$browser/"
+              echo "✅ Copied functional reports for $browser"
+            fi
+          done
+          
+          # Organize regression test reports
+          for browser in chromium firefox webkit; do
+            if [ -d "artifacts/regression-results-$browser/reports/$browser" ]; then
+              mkdir -p "reports/regression/$browser"
+              cp -r "artifacts/regression-results-$browser/reports/$browser"/* "reports/regression/$browser/"
+              echo "✅ Copied regression reports for $browser"
+            fi
+          done
+          
+          # Organize API test reports
+          if [ -d "artifacts/api-results-chromium/reports/chromium" ]; then
+            mkdir -p "reports/api/chromium"
+            cp -r "artifacts/api-results-chromium/reports/chromium"/* "reports/api/chromium/"
+            echo "✅ Copied API reports"
+          fi
+          
+          # Organize performance test reports
+          if [ -d "artifacts/performance-results-chromium/reports/chromium" ]; then
+            mkdir -p "reports/performance/chromium"
+            cp -r "artifacts/performance-results-chromium/reports/chromium"/* "reports/performance/chromium/"
+            echo "✅ Copied performance reports"
+          fi
+          
+          ls -la reports/
+      
+      - name: Generate summary for each suite
+        run: |
+          echo "## 📊 Test Suite Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Determine which suites ran
+          SUITES_RUN=()
+          [ "${{ needs.functional-tests.result }}" != "skipped" ] && SUITES_RUN+=("Functional")
+          [ "${{ needs.regression-tests.result }}" != "skipped" ] && SUITES_RUN+=("Regression")
+          [ "${{ needs.api-tests.result }}" != "skipped" ] && SUITES_RUN+=("API")
+          [ "${{ needs.performance-tests.result }}" != "skipped" ] && SUITES_RUN+=("Performance")
+          
+          echo "### Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Suites Executed**: ${SUITES_RUN[*]}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Execution Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Suite Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Suite | Status | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          # Functional Tests
+          if [ "${{ needs.functional-tests.result }}" != "skipped" ]; then
+            if [ "${{ needs.functional-tests.result }}" == "success" ]; then
+              echo "| 🎨 Functional UI | Ran | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| 🎨 Functional UI | Ran | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "| 🎨 Functional UI | Skipped | ⏭️ |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Regression Tests
+          if [ "${{ needs.regression-tests.result }}" != "skipped" ]; then
+            if [ "${{ needs.regression-tests.result }}" == "success" ]; then
+              echo "| 🔄 Regression | Ran | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| 🔄 Regression | Ran | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "| 🔄 Regression | Skipped | ⏭️ |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # API Tests
+          if [ "${{ needs.api-tests.result }}" != "skipped" ]; then
+            if [ "${{ needs.api-tests.result }}" == "success" ]; then
+              echo "| 🔌 API | Ran | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| 🔌 API | Ran | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "| 🔌 API | Skipped | ⏭️ |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Performance Tests
+          if [ "${{ needs.performance-tests.result }}" != "skipped" ]; then
+            if [ "${{ needs.performance-tests.result }}" == "success" ]; then
+              echo "| ⚡ Performance | Ran | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| ⚡ Performance | Ran | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "| ⚡ Performance | Skipped | ⏭️ |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📁 Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Test results and reports available in workflow artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Screenshots captured on failures" >> $GITHUB_STEP_SUMMARY
+          echo "- HTML reports generated for each test suite" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let summaryContent = '## 📊 Test Suite Results\n\n';
+            
+            const suites = [
+              { name: 'Functional UI', icon: '🎨', result: '${{ needs.functional-tests.result }}' },
+              { name: 'Regression', icon: '🔄', result: '${{ needs.regression-tests.result }}' },
+              { name: 'API', icon: '🔌', result: '${{ needs.api-tests.result }}' },
+              { name: 'Performance', icon: '⚡', result: '${{ needs.performance-tests.result }}' }
+            ];
+            
+            summaryContent += '| Suite | Status |\n|-------|--------|\n';
+            
+            suites.forEach(suite => {
+              if (suite.result !== 'skipped') {
+                const status = suite.result === 'success' ? '✅ Passed' : '❌ Failed';
+                summaryContent += `| ${suite.icon} ${suite.name} | ${status} |\n`;
+              }
+            });
+            
+            summaryContent += '\n🔗 [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summaryContent
+            })
+
+  notification:
+    name: Send Notification
+    runs-on: ubuntu-latest
+    needs: [functional-tests, regression-tests, api-tests, performance-tests, report]
+    if: always()
+    
+    steps:
+      - name: Determine overall status
+        id: overall-status
+        run: |
+          FAILED=false
+          
+          [ "${{ needs.functional-tests.result }}" == "failure" ] && FAILED=true
+          [ "${{ needs.regression-tests.result }}" == "failure" ] && FAILED=true
+          [ "${{ needs.api-tests.result }}" == "failure" ] && FAILED=true
+          [ "${{ needs.performance-tests.result }}" == "failure" ] && FAILED=true
+          
+          if [ "$FAILED" = true ]; then
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "emoji=❌" >> $GITHUB_OUTPUT
+          else
+            echo "status=passed" >> $GITHUB_OUTPUT
+            echo "emoji=✅" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Workflow result notification
+        run: |
+          echo "${{ steps.overall-status.outputs.emoji }} Test Suites ${{ steps.overall-status.outputs.status }}!"
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Actor: ${{ github.actor }}"
+          echo ""
+          echo "Suite Results:"
+          echo "  Functional: ${{ needs.functional-tests.result }}"
+          echo "  Regression: ${{ needs.regression-tests.result }}"
+          echo "  API: ${{ needs.api-tests.result }}"
+          echo "  Performance: ${{ needs.performance-tests.result }}"
+          echo ""
+          echo "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

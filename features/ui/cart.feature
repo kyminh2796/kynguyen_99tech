@@ -6,7 +6,7 @@ Feature: Shopping Cart
   Background:
     Given I am on the Demoblaze login page
 
-  @regression @functional @P0 @demo
+  @regression @functional @P0
   Scenario: C-01 Add single product to cart
     When I sign up with random account and login
     When I add the following products to cart:

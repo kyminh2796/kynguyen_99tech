@@ -18,6 +18,7 @@
     "test:api:all-browsers": "cucumber-js --require-module ts-node/register --profile chromium --tags @api; cucumber-js --require-module ts-node/register --profile firefox --tags @api; cucumber-js --require-module ts-node/register --profile webkit --tags @api; npm run report:html",
     "test:performance": "cucumber-js --require-module ts-node/register --profile chromium --tags @performance; npm run report:html",
     "report:html": "node config/report/multiple-cucumber-html-reporter.js",
+    "report:summary": "node config/report/generate-summary.js",
     "clean": "rimraf test-results reports screenshots videos",
     "install:browsers": "npx playwright install"
   },
