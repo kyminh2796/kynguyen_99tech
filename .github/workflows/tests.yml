@@ -1,4 +1,4 @@
-name: E2E Tests
+name: Functional Tests (Auto)
 
 on:
   push:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   test:
-    name: Test on ${{ matrix.browser }}
+    name: Functional Test - ${{ matrix.browser }}
     runs-on: ubuntu-latest
     timeout-minutes: 30 # Prevent hanging jobs
     strategy:
@@ -52,12 +52,17 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npm run install:browsers
       
-      - name: Run tests on ${{ matrix.browser }}
-        run: npm run test:${{ matrix.browser }}
+      - name: Run functional UI tests on ${{ matrix.browser }}
+        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@functional and @ui"
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
           CI: true
         continue-on-error: false
+      
+      - name: Generate HTML report
+        if: always()
+        run: npm run report:html
+        continue-on-error: true
       
       - name: Upload test results
         if: always()
@@ -171,24 +176,3 @@ jobs:
           echo "Commit: ${{ github.sha }}"
           echo "Actor: ${{ github.actor }}"
           echo "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-      
-      # Add Slack/Discord/Email notification here if needed
-      # - name: Slack Notification
-      #   if: steps.workflow-status.outputs.status == 'failed'
-      #   uses: slackapi/slack-github-action@v1
-      #   with:
-      #     payload: |
-      #       {
-      #         "text": "${{ steps.workflow-status.outputs.emoji }} E2E Tests ${{ steps.workflow-status.outputs.status }}!",
-      #         "blocks": [
-      #           {
-      #             "type": "section",
-      #             "text": {
-      #               "type": "mrkdwn",
-      #               "text": "*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Status:* ${{ steps.workflow-status.outputs.status }}"
-      #             }
-      #           }
-      #         ]
-      #       }
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
