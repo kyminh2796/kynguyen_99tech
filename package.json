@@ -12,6 +12,11 @@
     "test:all-browsers": "cucumber-js --require-module ts-node/register --profile chromium; cucumber-js --require-module ts-node/register --profile firefox; cucumber-js --require-module ts-node/register --profile webkit; npm run report:html",
     "test:regression": "cucumber-js --require-module ts-node/register --profile chromium --tags @regression; npm run report:html",
     "test:feature": "cucumber-js --require-module ts-node/register --profile chromium",
+    "test:ui": "cucumber-js --require-module ts-node/register --profile chromium --tags @ui; npm run report:html",
+    "test:ui:all-browsers": "cucumber-js --require-module ts-node/register --profile chromium --tags @ui; cucumber-js --require-module ts-node/register --profile firefox --tags @ui; cucumber-js --require-module ts-node/register --profile webkit --tags @ui; npm run report:html",
+    "test:api": "cucumber-js --require-module ts-node/register --profile chromium --tags @api; npm run report:html",
+    "test:api:all-browsers": "cucumber-js --require-module ts-node/register --profile chromium --tags @api; cucumber-js --require-module ts-node/register --profile firefox --tags @api; cucumber-js --require-module ts-node/register --profile webkit --tags @api; npm run report:html",
+    "test:performance": "cucumber-js --require-module ts-node/register --profile chromium --tags @performance; npm run report:html",
     "report:html": "node config/report/multiple-cucumber-html-reporter.js",
     "clean": "rimraf test-results reports screenshots videos",
     "install:browsers": "npx playwright install"

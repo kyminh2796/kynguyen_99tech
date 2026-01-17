@@ -1,0 +1,75 @@
+{
+  "performanceThresholds": {
+    "pageLoad": 3000,
+    "navigationTime": 2000,
+    "domContentLoaded": 1500,
+    "firstPaint": 1000,
+    "firstContentfulPaint": 1200,
+    "resourceLoad": 1000,
+    "apiResponse": 2000,
+    "formSubmission": 2000,
+    "clickResponse": 1000,
+    "memoryLimit": 100
+  },
+  "acceptableMetrics": {
+    "pageLoadGood": 1500,
+    "pageLoadFair": 2500,
+    "pageLoadPoor": 3500,
+    "apiResponseGood": 1000,
+    "apiResponseFair": 2000,
+    "apiResponsePoor": 3000
+  },
+  "performanceTestScenarios": [
+    {
+      "name": "Homepage Load",
+      "url": "/index.html",
+      "metric": "pageLoad",
+      "threshold": 3000
+    },
+    {
+      "name": "Login Page Load",
+      "url": "/login.html",
+      "metric": "pageLoad",
+      "threshold": 2000
+    },
+    {
+      "name": "Product Search",
+      "url": "/search",
+      "metric": "apiResponse",
+      "threshold": 2000
+    },
+    {
+      "name": "Add to Cart",
+      "url": "/cart/add",
+      "metric": "apiResponse",
+      "threshold": 1500
+    },
+    {
+      "name": "Checkout",
+      "url": "/checkout",
+      "metric": "formSubmission",
+      "threshold": 2000
+    }
+  ],
+  "resourceMetrics": {
+    "maxResourceSize": 1000000,
+    "maxResourceLoadTime": 1000,
+    "maxTotalResources": 100,
+    "acceptableImageLoadTime": 500,
+    "acceptableScriptLoadTime": 1000,
+    "acceptableStyleLoadTime": 500
+  },
+  "memoryMetrics": {
+    "maxUsedHeap": 100,
+    "maxTotalHeap": 200,
+    "warningThreshold": 80,
+    "criticalThreshold": 150
+  },
+  "performanceAlerts": {
+    "pageLoadSlow": "Page load exceeded 3 seconds",
+    "apiResponseSlow": "API response exceeded 2 seconds",
+    "resourceSlow": "Resource loading exceeded 1 second",
+    "memoryHigh": "Memory usage exceeded threshold",
+    "manyResources": "Too many resources loaded on page"
+  }
+}
