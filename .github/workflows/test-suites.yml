@@ -65,7 +65,7 @@ jobs:
         run: npm run install:browsers
       
       - name: Run functional UI tests
-        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "(@functional and @ui)"
+        run: npx cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "(@functional and @ui)"
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
           CI: true
@@ -141,7 +141,7 @@ jobs:
         run: npm run install:browsers
       
       - name: Run regression tests
-        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@regression"
+        run: npx cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@regression"
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
           CI: true
@@ -217,7 +217,7 @@ jobs:
         run: npm run install:browsers
       
       - name: Run API tests
-        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@api"
+        run: npx cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@api"
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
           CI: true
@@ -284,7 +284,7 @@ jobs:
         run: npm run install:browsers
       
       - name: Run performance tests
-        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@performance"
+        run: npx cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@performance"
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
           CI: true
