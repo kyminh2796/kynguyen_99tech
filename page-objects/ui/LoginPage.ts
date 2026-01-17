@@ -1,5 +1,5 @@
 // @ts-nocheck
-const BaseLib = require('../lib/baseLib.ts');
+const BaseLib = require('../../lib/baseLib.ts');
 
 class LoginPage extends BaseLib {
   constructor(page) {
