@@ -65,7 +65,7 @@ jobs:
         run: npm run install:browsers
       
       - name: Run functional UI tests
-        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@functional and @ui"
+        run: cucumber-js --require-module ts-node/register --profile ${{ matrix.browser }} --tags "@functional" --tags "@ui"
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://www.demoblaze.com' }}
           CI: true
