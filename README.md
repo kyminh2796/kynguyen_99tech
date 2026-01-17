@@ -1,10 +1,11 @@
-# Playwright BDD + Cucumber + JavaScript Framework
+# Playwright BDD + Cucumber + TypeScript Framework
 
-A modern, scalable test automation framework combining **Playwright** with **Behavior-Driven Development (BDD)** using **Cucumber** and **JavaScript**.
+A modern, scalable test automation framework combining **Playwright** with **Behavior-Driven Development (BDD)** using **Cucumber** and **TypeScript**.
 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 [![Playwright](https://img.shields.io/badge/playwright-1.39.0-blue)](https://playwright.dev/)
 [![Cucumber](https://img.shields.io/badge/cucumber-9.6.0-green)](https://cucumber.io/)
+[![TypeScript](https://img.shields.io/badge/typescript-5.1.6-blue)](https://www.typescriptlang.org/)
 
 ---
 
@@ -20,6 +21,7 @@ A modern, scalable test automation framework combining **Playwright** with **Beh
 - [Writing Tests](#-writing-tests)
 - [Advanced Features](#-advanced-features)
 - [Troubleshooting](#-troubleshooting)
+- [Steps to Execute Demo Scripts](#-steps-to-execute-demo-scripts)
 
 ---
 
@@ -35,7 +37,10 @@ A modern, scalable test automation framework combining **Playwright** with **Beh
 - 🌐 **Cross-Platform** - Works on macOS, Windows, Linux
 - 📝 **Structured Logging** - Color-coded console output with timestamps
 - 🏗️ **Page Object Model** - Clean, maintainable test architecture
-- ⚡ **BaseLib** - Reusable Playwright utility functions
+- ⚡ **BaseLib** - Reusable Playwright utility functions with element highlighting
+- 🔷 **TypeScript Support** - Type-safe development with modern JavaScript features
+- 🧪 **Three Test Types** - UI, API, and Performance testing in one framework
+- 🎯 **Tag-Based Execution** - Run specific test groups (@regression, @api, @performance)
 
 ---
 
@@ -91,19 +96,34 @@ If everything is set up correctly, you'll see tests running and a report will be
 │       └── custom-styles.css       # Custom report styling
 │
 ├── features/                        # Gherkin feature files
-│   ├── authentication.feature      # Login/auth scenarios
-│   ├── cart.feature               # Shopping cart scenarios
-│   └── products.feature           # Product verification scenarios
-│
-├── step-definitions/               # Step implementations
+│   ├── ui/                         # UI test scenarios
+│   │   ├── authentication.feature # Login/auth scenarios
+│   │   ├── cart.feature          # Shopping cart scenarios
+│   │   └── signUp.feature        # User registration scenarios
+│   ├── api/                        # API test scenarios
+│   ├── ui/                         # UI step definitions
+│   │   ├── authentication.steps.ts
+│   │   ├── cart.steps.ts
+│   │   └── products.steps.ts
+│   ├── api/                        # API step definiti
+│   ├── ui/                         # UI page objects
+│   │   ├── LoginPage.ts
+│   │   ├── InventoryPage.ts
+│   │   └── CartPage.ts
+│   ├── api/                        # API page objects
+│   │   └── APIPts                 # Base Playwright functions with highlighting
+│   └── utils/
+│       ├── browser-manager.ts     # Browser lifecycle management
+│       ├── data-helper.ts         # Test data loading
+│       └── performance-utils.ts   # Performance measurement utilitiesions
 │   ├── authentication.steps.js
 │   ├── cart.steps.js
-│   └── products.steps.js
-│
-├── page-objects/                   # Page Object Model
+│   ├── world.ts                   # Custom World (context)
+│   ├── global-setup.ts            # Global before all tests
+│   └── global-teardown.t           # Page Object Model
 │   ├── LoginPage.js
 │   ├── InventoryPage.js
-│   └── CartPage.js
+│   └── hooks.te.js
 │
 ├── lib/                            # Utilities and helpers
 │   ├── baseLib.js                 # Base Playwright functions
@@ -114,7 +134,9 @@ If everything is set up correctly, you'll see tests running and a report will be
 │
 ├── support/                        # Test lifecycle
 │   ├── world.js                   # Custom World (context)
-│   ├── global-setup.js            # Global before all tests
+│   ├── users.json                 # User credentials
+│   ├── api.json                   # API endpoints and data
+│   └── performance.json           # Performance threshold tests
 │   └── global-teardown.js         # Global after all tests
 │
 ├── hooks/                          # Cucumber hooks
@@ -157,7 +179,7 @@ If everything is set up correctly, you'll see tests running and a report will be
 npm test
 ```
 
-### Run Tests on Specific Browser
+**WebKit (Safari)**on Specific Browser
 
 **Chromium (Chrome)**
 ```bash
@@ -173,9 +195,27 @@ npm run test:firefox
 ```bash
 npm run test:webkit
 ```
-
-### Run All Browsers Sequentially
+UI Tests Only
 ```bash
+npm run test:ui                    # UI tests on Chromium
+npm run test:ui:all-browsers       # UI tests on all browsers
+```
+
+### Run API Tests Only
+```bash
+npm run test:api                   # API tests on Chromium
+npm run test:api:all-browsers      # API tests on all browsers
+```
+
+### Run Performance Tests Only
+```bash
+npm run test:performance           # Performance tests on Chromium
+```
+
+### Run Specific Tag
+```bash
+npm test -- --tags "@regression"
+npm test -- --tags "@P0
 npm run test:all-browsers
 ```
 
@@ -222,7 +262,7 @@ open reports/webkit/html-report/index.html
 
 ### Report Contents
 
-Each report includes:
+Each report includes:tru
 - ✅ **Test Results** - Pass/Fail status for each scenario
 - 📊 **Execution Time** - Duration of each step and scenario
 - 🏷️ **Tags** - Scenario tags (e.g., @demo, @smoke)
@@ -232,7 +272,7 @@ Each report includes:
 
 ### Screenshots
 
-Failed test screenshots are saved in:
+Failed test sctrue, ots are saved in:
 ```
 reports/{browser}/screenshots/failed-{scenario-name}-{timestamp}.png
 ```
@@ -258,9 +298,9 @@ This is the **single source of truth** for all test configuration:
 
 **🔧 Configuration Parameters Explained:**
 
-```javascript
-module.exports = defineConfig({
-  workers: 3,              // ⬅️ Line 12: Parallel scenarios (1-10)
+```javascripttrue`** - Browser window visibility
+  - `false` = Browser window visible (debugging, recording)
+  - `true` = Browser runs in background (faster, CI/CD) - Current settingarios (1-10)
   use: {
     headless: false,       // ⬅️ Line 18: Browser visibility
     slowMo: 800,           // ⬅️ Line 19: Speed delay (0-1000+)
@@ -373,53 +413,134 @@ Feature: User Login
 
 ```javascript
 const { expect } = require('@playwright/test');
-const LoginPage = require('../page-objects/LoginPage');
-
-let loginPage;
-
-Given('I am on the login page', async function () {
-  loginPage = new LoginPage(this.page);
-  await loginPage.navigate('https://www.saucedemo.com/');
-});
-
-When('I enter username {string} and password {string}', async function (username, password) {
-  await loginPage.enterUsername(username);
-  await loginPage.enterPassword(password);
-});
-
-When('I click the login button', async function () {
-  await loginPage.clickLogin();
-});
-
-Then('I should be redirected to the inventory page', async function () {
-  await expect(this.page).toHaveURL(/.*inventory.html/);
-});
-```
-
-### 3. Create Page Object
-
-`page-objects/LoginPage.js`
-```javascript
-const BaseLib = require('../lib/baseLib');
+const LoginPagui/LoginPage.ts`
+```typescript
+const BaseLib = require('../../lib/baseLib');
 
 class LoginPage extends BaseLib {
   constructor(page) {
     super(page);
     
     this.selectors = {
-      usernameInput: '//input[@data-test="username"]',
-      passwordInput: '//input[@data-test="password"]',
-      loginButton: '//input[@data-test="login-button"]',
+      loginButton: '#login2',
+      usernameInput: '#loginusername',
+      passwordInput: '#loginpassword',
+      loginSubmitButton: "//button[text()='Log in']",
+      logoutButton: '#logout2',
     };
   }
 
-  async enterUsername(username) {
+  async login(username: string, password: string) {
+    await this.clickElement(this.selectors.loginButton);
     await this.fillInput(this.selectors.usernameInput, username);
+    await this.fillInput(this.selectors.passwordInput, password);
+    await this.clickElement(this.selectors.loginSubmitButton);
   }
 
-  async enterPassword(password) {
-    await this.fillInput(this.selectors.passwordInput, password);
+  async clickLogout() {
+    await this.clickElement(this.selectors.logoutButton);
   }
+}
+
+module.exports = LoginPage;
+```
+
+### 4. Create Test Data`page-objects/LoginPage.js`
+```javascript
+const BaseLib = require('../lib/baseLib');
+standardUser": {
+    "username": "testuser123",
+    "password": "TestPass123!"
+  },
+  "invalidUser": {
+    "username": "nonexistentuser999",
+    "password": "WrongPassword!"
+  }
+}
+```
+
+---
+
+## 🔥 Advanced Features
+
+### Framework Architecture & Rationale
+
+This framework is designed with the following principles:
+
+1. **Separation of Concerns**: Tests are organized by that automatically highlight elements:
+
+```typescript
+await this.navigateTo(url);                    // Navigate to URL with networkidle
+await this.clickElement(selector);             // Click with highlight + wait
+await this.fillInput(selector, text);          // Fill input with highlight + wait
+await this.getText(selector);                  // Get text with highlight + wait
+await this.isElementVisible(selector);         // Check visibility
+await this.isElementEnabled(selector);         // Check if enabled
+await this.getElementCount(selector);          // Count matching elements
+await this.waitForElement(selector, options);  // Explicit wait for element
+await this.highlightElement(selector);         // Highlight element with green border and "AutomationTest" label
+```
+
+**Etypescript
+const DataHelper = require('../lib/utils/data-helper');
+
+// Load user credentials
+const users = DataHelper.loadTestData('users.json');
+const user = users.standardUser;
+
+// Load product data
+const productData = DataHelper.loadTestData('product.json');
+const product = productData.productsByName['Samsung Galaxy S6'];
+
+/regression @functional @P0
+Scenario: Login with valid credentials
+  # Tags appear as colored badges in the report
+  # Priority tags: @P0 (Critical), @P1 (High), @P2 (Medium)
+  # Type tags: @functional, @negative, @edge, @api, @performance
+```
+
+### Test Organization
+
+Tests are organized by priority and type:
+- **@P0**: Critical tests (blockers)
+- **@P1**: High priority tests
+- **@P2**: Medium priority tests
+- **@regression**: All regression tests
+- **@functional**: Positive test cases
+- **@negative**: Negative test cases
+- **@api**: API tests
+- **@performance**: Performance tests
+- **@ui**: UI tests
+
+### Performance Testing
+
+The framework includes built-in performance testing capabilities:
+
+```typescript
+const PerformanceUtils = require('../lib/utils/performance-utils');
+
+// Measure page load time
+const loadTime = await PerformanceUtils.measurePageLoadTime(page);
+
+// Measure navigation timing
+const navTiming = await PerformanceUtils.getNavigationTiming(page);
+
+// Check performance thresholds
+const thresholds = DataHelper.loadTestData('performance.json');
+expect(loadTime).toBeLessThan(thresholds.pageLoadTime);
+```
+
+### API Testing
+
+Test REST APIs using Playwright's API context:
+
+```typescript
+// API request context is automatically available in CustomWorld
+const response = await this.apiRequest.get('/api/products');
+expect(response.status()).toBe(200);
+
+const data = await response.json();
+expect(data).toHaveLength(9)
   async clickLogin() {
     await this.clickElement(this.selectors.loginButton);
   }
@@ -467,7 +588,7 @@ const DataHelper = require('../lib/utils/data-helper');
 const productData = DataHelper.loadTestData('product.json');
 const product = productData.productsByName['Sauce Labs Backpack'];
 ```
-
+Ky Nguyen
 ### Dynamic Tags in Reports
 
 Tags are automatically displayed in HTML reports with custom styling:
@@ -578,11 +699,171 @@ This project is for educational and practice purposes.
 # 1. Install dependencies
 npm install && npm run install:browsers
 
-# 2. Run tests
+# 2. Run all tests (Chromium)
 npm test
 
-# 3. View report (opens in browser)
+# 3. Run UI tests only
+npm run test:ui
+
+# 4. Run API tests only
+npm run test:api
+
+# 5. Run performance tests
+npm run test:performance
+
+# 6. Run on all browsers
+npm run test:all-browsers
+
+# 7. View report (opens in browser)
 open reports/chromium/html-report/index.html
+```
+
+---
+
+## 🚀 Steps to Execute Demo Scripts
+
+### Option 1: Run Complete Test Suite
+
+Execute all tests (UI, API, and Performance) on Chromium:
+
+```bash
+npm test
+```
+
+**What happens:**
+1. Launches Chromium browser
+2. Executes all feature files from UI, API, and Performance tests
+3. Runs up to 3 scenarios in parallel
+4. Generates HTML report automatically
+5. Saves screenshots for failed tests
+
+**Expected output:**
+```
+> playwright-bdd-cucumber-framework@1.0.0 test
+> cucumber-js --require-module ts-node/register --profile chromium
+
+✅ Scenario: L-01 Login with valid username and password
+✅ Scenario: C-01 Add single product to cart
+✅ Scenario: API-01 Verify API is healthy
+...
+
+XX scenarios (XX passed)
+XX steps (XX passed)
+```
+
+### Option 2: Run Specific Test Types
+
+**UI Tests Only:**
+```bash
+npm run test:ui
+```
+Executes only UI scenarios (authentication, cart, sign-up features)
+
+**API Tests Only:**
+```bash
+npm run test:api
+```
+Executes only API scenarios (REST API testing)
+
+**Performance Tests Only:**
+```bash
+npm run test:performance
+```
+Executes only performance scenarios (load time, metrics)
+
+### Option 3: Run on All Browsers
+
+Execute tests on Chromium, Firefox, and WebKit sequentially:
+
+```bash
+npm run test:all-browsers
+```
+
+**What happens:**
+1. Runs all tests on Chromium → generates reports/chromium/
+2. Runs all tests on Firefox → generates reports/firefox/
+3. Runs all tests on WebKit → generates reports/webkit/
+4. Each browser gets separate reports and screenshots
+
+### Option 4: Run Specific Priority Tests
+
+**Critical Tests Only (P0):**
+```bash
+npm test -- --tags "@P0"
+```
+
+**High Priority Tests (P1):**
+```bash
+npm test -- --tags "@P1"
+```
+
+**Regression Suite:**
+```bash
+npm run test:regression
+```
+
+### Option 5: Run Single Feature File
+
+```bash
+npm run test:feature features/ui/authentication.feature
+```
+
+### Viewing Test Results
+
+After running tests, view the HTML report:
+
+**Chromium Report:**
+```bash
+open reports/chromium/html-report/index.html
+```
+
+**Firefox Report:**
+```bash
+open reports/firefox/html-report/index.html
+```
+
+**WebKit Report:**
+```bash
+open reports/webkit/html-report/index.html
+```
+
+**Or manually navigate to:**
+```
+automationCode/reports/{browser}/html-report/index.html
+```
+
+### Clean Up Before Running
+
+Remove old reports and start fresh:
+
+```bash
+npm run clean && npm test
+```
+
+### Troubleshooting Demo Execution
+
+**Issue: Tests fail with "browser not found"**
+```bash
+# Solution: Install browsers
+npm run install:browsers
+```
+
+**Issue: TypeScript compilation errors**
+```bash
+# Solution: Ensure TypeScript is installed
+npm install
+```
+
+**Issue: No report generated**
+```bash
+# Solution: Manually generate report
+npm run report:html
+```
+
+**Issue: Want to see browser during execution**
+```bash
+# Solution: Edit config/playwright.config.js
+# Change: headless: true → headless: false
 ```
 
 ---
