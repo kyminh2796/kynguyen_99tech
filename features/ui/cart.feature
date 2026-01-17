@@ -6,7 +6,7 @@ Feature: Shopping Cart
   Background:
     Given I am on the Demoblaze login page
 
-  @regression @functional @P0
+  @regression @functional @P0 @demo
   Scenario: C-01 Add single product to cart
     When I sign up with random account and login
     When I add the following products to cart:
@@ -14,7 +14,7 @@ Feature: Shopping Cart
     Then I open the shopping cart
     Then I should see product "Sony vaio i5" with correct title in cart
 
-  @regression @functional @P0
+  @regression @functional @P0 @demo
   Scenario: C-02 Add multiple products to cart
     When I sign up with random account and login
     When I add the following products to cart:
@@ -38,7 +38,7 @@ Feature: Shopping Cart
     When I remove product "Dell i7 8GB" from cart
     Then the cart badge should show 0 items
 
-  @regression @edge @P1
+  @regression @edge @P1 @demo
   Scenario: C-04 Add same product multiple times
     When I sign up with random account and login
     When I add the same product "Sony vaio i5" to cart 5 times

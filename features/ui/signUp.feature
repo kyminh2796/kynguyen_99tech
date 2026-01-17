@@ -39,7 +39,7 @@ Feature: User Sign Up
     Then I should see the error message "Please enter a username"
     And I should remain on the sign up page
 
-  @regression @demo
+  @regression
   Scenario: Sign up with existing username
     When I enter an existing username "standardUser"
     And I enter a valid password "DemoPass123!"

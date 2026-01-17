@@ -6,7 +6,7 @@ Feature: User Authentication
   Background:
     Given I am on the Demoblaze login page
 
-  @regression @functional @P0
+  @regression @functional @P0 @demo
   Scenario: L-01 Login with valid username and password
     When I login as "standardUser"
     Then I should be redirected to the inventory page
@@ -52,7 +52,7 @@ Feature: User Authentication
     When I click the login link repeatedly
     Then I should see a single login modal open
 
-  @regression @edge @P2
+  @regression @edge @P2 @demo
   Scenario: L-09 Login with special characters
     When I login as "specialCharUser"
     Then I should see the error message "invalidCredentials"

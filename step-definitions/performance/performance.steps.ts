@@ -340,7 +340,7 @@ When('I login to Demoblaze with valid credentials', async function () {
   console.log(`\n✅ Successfully logged in`);
 });
 
-Given('I am on the Demoblaze login page', async function () {
+Given('I am on the Demoblaze login page for performance', async function () {
   const baseUrl = testSiteData.environments.testEnv.baseUrl;
   await this.page.goto(baseUrl, { waitUntil: 'networkidle' });
   loginPage = new LoginPage(this.page);

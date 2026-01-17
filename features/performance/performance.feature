@@ -48,7 +48,7 @@ Feature: Performance Testing
 
   @regression @performance @P1
   Scenario: Measure login form submission time
-    Given I am on the Demoblaze login page
+    Given I am on the Demoblaze login page for performance
     When I measure login form submission time with valid credentials
     Then the form submission time should be within 2000ms threshold
 
