@@ -61,7 +61,7 @@ jobs:
         run: npm ci
       
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        # Always install to ensure system dependencies
         run: npx playwright install --with-deps ${{ matrix.browser }}
       
       - name: Run functional UI tests
@@ -137,7 +137,7 @@ jobs:
         run: npm ci
       
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        # Always install to ensure system dependencies
         run: npx playwright install --with-deps ${{ matrix.browser }}
       
       - name: Run regression tests
@@ -213,7 +213,7 @@ jobs:
         run: npm ci
       
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        # Always install to ensure system dependencies
         run: npx playwright install --with-deps ${{ matrix.browser }}
       
       - name: Run API tests
@@ -280,7 +280,7 @@ jobs:
         run: npm ci
       
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        # Always install to ensure system dependencies
         run: npx playwright install --with-deps ${{ matrix.browser }}
       
       - name: Run performance tests
