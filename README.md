@@ -14,9 +14,7 @@ A modern, scalable test automation framework combining **Playwright** with **Beh
 ✨ **Test Summary Report** - Comprehensive pass/fail statistics with execution time  
 🚀 **Optimized CI/CD** - 25-33% faster GitHub Actions with browser caching  
 📊 **GitHub Integration** - Rich test summaries in workflow runs  
-
 👉 **Quick Start**: Run `npm run report:summary` after tests  
-📖 **Full Guide**: See [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
 
 ---
 
@@ -28,8 +26,8 @@ A modern, scalable test automation framework combining **Playwright** with **Beh
 - [Project Structure](#-project-structure)
 - [Running Tests](#-running-tests)
 - [Viewing Reports](#-viewing-reports)
-- [Test Summary Report](#-test-summary-report) ← **NEW**
-- [CI/CD Integration](#-cicd-integration) ← **NEW**
+- [Test Summary Report](#-test-summary-report)
+- [CI/CD Integration](#-cicd-integration)
 - [Configuration](#-configuration)
 - [Writing Tests](#-writing-tests)
 - [Advanced Features](#-advanced-features)
@@ -46,8 +44,8 @@ A modern, scalable test automation framework combining **Playwright** with **Beh
 - 🥒 **BDD with Cucumber** - Write tests in natural Gherkin language
 - 📸 **Auto Screenshots** - Captures screenshots on test failures
 - 🎨 **Custom HTML Reports** - Beautiful, detailed test reports with custom styling
-- 📈 **Test Summary Reports** - Pass/fail statistics with execution time ← **NEW**
-- 🤖 **CI/CD Optimized** - Enhanced GitHub Actions with caching & summaries ← **NEW**
+- 📈 **Test Summary Reports** - Pass/fail statistics with execution time 
+- 🤖 **CI/CD Optimized** - Enhanced GitHub Actions with caching & summaries
 - 🔧 **Single Config Source** - Centralized worker/parallel configuration
 - 🌐 **Cross-Platform** - Works on macOS, Windows, Linux
 - 📝 **Structured Logging** - Color-coded console output with timestamps
@@ -116,16 +114,18 @@ If everything is set up correctly, you'll see tests running and a report will be
 │   │   ├── cart.feature          # Shopping cart scenarios
 │   │   └── signUp.feature        # User registration scenarios
 │   ├── api/                        # API test scenarios
+│   ├── performance/                # performance test scenarios
 │   ├── ui/                         # UI step definitions
 │   │   ├── authentication.steps.ts
 │   │   ├── cart.steps.ts
 │   │   └── products.steps.ts
 │   ├── api/                        # API step definiti
+│   ├── performance/                # performance step definiti
 │   ├── ui/                         # UI page objects
 │   │   ├── LoginPage.ts
 │   │   ├── InventoryPage.ts
 │   │   └── CartPage.ts
-│   ├── api/                        # API page objects
+│   ├── api/                        # API
 │   │   └── APIPts                 # Base Playwright functions with highlighting
 │   └── utils/
 │       ├── browser-manager.ts     # Browser lifecycle management
@@ -358,15 +358,6 @@ Total Steps:       75
 - 📊 **Pass Rate %** - Success rate for each category
 - 🎨 **Color Coded** - Easy-to-read console output
 
-### Full Documentation
-
-For complete details, see:
-- 📖 [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - Answers to your questions
-- 📚 [CICD_IMPROVEMENTS.md](CICD_IMPROVEMENTS.md) - Detailed CI/CD improvements
-- 🚀 [QUICK_START_SUMMARY.md](QUICK_START_SUMMARY.md) - Quick start guide
-
----
-
 ## 🤖 CI/CD Integration
 
 ### GitHub Actions
@@ -398,15 +389,6 @@ Tests automatically run on:
 3. Click **Run workflow**
 4. Select branch and run
 
-### CI/CD Documentation
-
-See [CICD_IMPROVEMENTS.md](CICD_IMPROVEMENTS.md) for:
-- Complete list of improvements
-- Performance impact metrics
-- Additional recommendations
-- Best practices
-
----
 
 ## ⚙️ Configuration
 
@@ -531,14 +513,36 @@ Feature: User Login
 
   @demo
   Scenario: Successful login
-    When I enter username "standard_user" and password "secret_sauce"
+    When I enter username "standard_user" and password "abc@123"
     And I click the login button
     Then I should be redirected to the inventory page
 ```
-
-```javascript
+### 2. Create a step definition File
+```typescript
+const { Given, When, Then } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
-const LoginPagui/LoginPage.ts`
+const LoginPage = require('../../page-objects/ui/LoginPage.ts');
+const InventoryPage = require('../../page-objects/ui/InventoryPage.ts');
+const DataHelper = require('../../lib/utils/data-helper.ts');
+
+let loginPage;
+let inventoryPage;
+let testSiteData;
+let errorMessages;
+let usersData;
+
+Given('I am on the Demoblaze sign up page', async function () {
+  // Load test site data and error messages
+  testSiteData = DataHelper.loadTestData('testSite.json');
+  errorMessages = DataHelper.loadTestData('errorMessages.json');
+  const baseUrl = testSiteData.environments.testEnv.baseUrl;
+  loginPage = new LoginPage(this.page);
+  await loginPage.navigateTo(baseUrl);
+  await loginPage.clickSignUpLink();
+});
+```
+### 3. Create a page object File
+
 ```typescript
 const BaseLib = require('../../lib/baseLib');
 
@@ -570,8 +574,9 @@ class LoginPage extends BaseLib {
 module.exports = LoginPage;
 ```
 
-### 4. Create Test Data`page-objects/LoginPage.js`
-```javascript
+
+### 4. Create Test Data
+```typescript
 const BaseLib = require('../lib/baseLib');
 standardUser": {
     "username": "testuser123",
@@ -686,15 +691,10 @@ expect(data).toHaveLength(9)
 
 ---
 
-## 🔥 Advanced Features
-
-
-
-
 ### BaseLib Utilities
 
 All Page Objects extend `BaseLib` with common methods:
-```javascript
+```typescript
 await this.navigateTo(url);
 await this.clickElement(selector);
 await this.fillInput(selector, text);
@@ -707,7 +707,7 @@ await this.getElementCount(selector);
 ### Data Helper
 
 Load test data from JSON files:
-```javascript
+```typescript
 const DataHelper = require('../lib/utils/data-helper');
 
 const productData = DataHelper.loadTestData('product.json');
@@ -792,19 +792,6 @@ nvm use 18
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Write tests following BDD principles
-4. Ensure all tests pass (`npm test`)
-5. Commit changes (`git commit -m 'Add amazing feature'`)
-6. Push to branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
----
 
 ## 📄 License
 
@@ -814,7 +801,7 @@ This project is for educational and practice purposes.
 
 ## 👨‍💻 Author
 
-**Cuong Huynh**
+**Ky Nguyen**
 
 ---
 
